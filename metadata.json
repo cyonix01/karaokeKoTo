@@ -1,6 +1,6 @@
 {
-  "name": "",
-  "description": "",
+  "name": "KaraokeHub",
+  "description": "A real-time karaoke queueing system using YouTube.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
