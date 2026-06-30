@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { io, Socket } from 'socket.io-client';
 import { RoomState, Song } from '../types';
-import { Search, Loader2, Plus, Play, Music, LayoutList, Check } from 'lucide-react';
+import { Search, Loader2, Plus, Play, Music, LayoutList, Check, SkipForward } from 'lucide-react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -78,6 +78,12 @@ export default function RemoteScreen() {
       socket.emit('add-song', { roomCode: roomId, song });
       setAddedAnimation(song.videoId);
       setTimeout(() => setAddedAnimation(null), 1500);
+    }
+  };
+
+  const skipSong = () => {
+    if (socket && roomId) {
+      socket.emit('next-song', roomId);
     }
   };
 
@@ -284,6 +290,13 @@ export default function RemoteScreen() {
                 <h4 className="text-white font-medium text-sm truncate">{roomState.currentSong.title}</h4>
                 <p className="text-neutral-400 text-xs truncate">{roomState.currentSong.channelTitle}</p>
               </div>
+              <button
+                onClick={skipSong}
+                className="w-10 h-10 rounded-full bg-neutral-800 flex items-center justify-center text-neutral-300 hover:bg-neutral-700 active:bg-neutral-600 transition-colors"
+                title="Skip Song"
+              >
+                <SkipForward className="w-5 h-5" />
+              </button>
             </div>
           </div>
         </div>
