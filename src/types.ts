@@ -4,6 +4,7 @@ export interface Song {
   title: string;
   thumbnail: string;
   channelTitle: string;
+  reservedBy?: string;
 }
 
 export interface RoomState {

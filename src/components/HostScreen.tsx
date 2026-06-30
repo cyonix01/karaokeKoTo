@@ -151,7 +151,10 @@ export default function HostScreen() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="font-bold truncate text-sm">{song.title}</p>
-                      <p className="text-xs text-neutral-500 truncate">{song.channelTitle}</p>
+                      <p className="text-xs text-neutral-500 truncate">
+                        {song.channelTitle}
+                        {song.reservedBy && <span className="text-rose-400 ml-1">• {song.reservedBy}</span>}
+                      </p>
                     </div>
                   </div>
                 ))

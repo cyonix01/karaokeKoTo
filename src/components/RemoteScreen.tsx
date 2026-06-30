@@ -19,8 +19,28 @@ export default function RemoteScreen() {
   const [isSearching, setIsSearching] = useState(false);
   const [activeTab, setActiveTab] = useState<'search' | 'queue'>('search');
   
+  const [userName, setUserName] = useState('');
+  const [showNameModal, setShowNameModal] = useState(false);
+  
   const [addedAnimation, setAddedAnimation] = useState<string | null>(null);
   const searchTimeout = useRef<NodeJS.Timeout>();
+
+  useEffect(() => {
+    const savedName = localStorage.getItem('karaokehub_username');
+    if (savedName) {
+      setUserName(savedName);
+    } else {
+      setShowNameModal(true);
+    }
+  }, []);
+
+  const handleSaveName = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (userName.trim()) {
+      localStorage.setItem('karaokehub_username', userName.trim());
+      setShowNameModal(false);
+    }
+  };
 
   useEffect(() => {
     if (!roomId) return;
@@ -75,7 +95,7 @@ export default function RemoteScreen() {
 
   const addToQueue = (song: Omit<Song, 'id'>) => {
     if (socket && roomId) {
-      socket.emit('add-song', { roomCode: roomId, song });
+      socket.emit('add-song', { roomCode: roomId, song: { ...song, reservedBy: userName } });
       setAddedAnimation(song.videoId);
       setTimeout(() => setAddedAnimation(null), 1500);
     }
@@ -259,7 +279,10 @@ export default function RemoteScreen() {
                   </div>
                   <div className="flex-1 min-w-0 flex flex-col justify-center">
                     <h4 className="text-white font-medium text-sm line-clamp-1">{song.title}</h4>
-                    <p className="text-neutral-500 text-xs mt-1">{song.channelTitle}</p>
+                    <p className="text-neutral-500 text-xs mt-1">
+                      {song.channelTitle}
+                      {song.reservedBy && <span className="text-rose-400 ml-1">• {song.reservedBy}</span>}
+                    </p>
                   </div>
                   <div className="flex items-center text-rose-500 font-bold text-sm px-2">
                     {String(index + 1).padStart(2, '0')}
@@ -288,7 +311,10 @@ export default function RemoteScreen() {
               </div>
               <div className="flex-1 min-w-0">
                 <h4 className="text-white font-medium text-sm truncate">{roomState.currentSong.title}</h4>
-                <p className="text-neutral-400 text-xs truncate">{roomState.currentSong.channelTitle}</p>
+                <p className="text-neutral-400 text-xs truncate">
+                  {roomState.currentSong.channelTitle}
+                  {roomState.currentSong.reservedBy && <span className="text-rose-400 ml-1">• {roomState.currentSong.reservedBy}</span>}
+                </p>
               </div>
               <button
                 onClick={skipSong}
@@ -298,6 +324,33 @@ export default function RemoteScreen() {
                 <SkipForward className="w-5 h-5" />
               </button>
             </div>
+          </div>
+        </div>
+      )}
+      {/* Name Modal */}
+      {showNameModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div className="bg-neutral-900 border border-neutral-800 rounded-3xl p-6 w-full max-w-sm shadow-2xl animate-in fade-in zoom-in duration-300">
+            <h3 className="text-xl font-bold text-white mb-2">What's your name?</h3>
+            <p className="text-neutral-400 text-sm mb-6">Enter your name so everyone knows whose song is up next.</p>
+            <form onSubmit={handleSaveName} className="space-y-4">
+              <input
+                type="text"
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
+                placeholder="Your Name (e.g. John)"
+                className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent"
+                maxLength={20}
+                autoFocus
+              />
+              <button
+                type="submit"
+                disabled={!userName.trim()}
+                className="w-full bg-rose-600 hover:bg-rose-500 disabled:opacity-50 disabled:cursor-not-allowed text-white py-3 rounded-xl font-medium transition-colors"
+              >
+                Start Adding Songs
+              </button>
+            </form>
           </div>
         </div>
       )}
