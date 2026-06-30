@@ -65,7 +65,7 @@ export default function HostScreen() {
             </div>
             <div>
               <h1 className="text-xl font-bold tracking-tight">KARAOKE<span className="text-rose-500 font-black">HUB</span></h1>
-              <p className="text-xs text-neutral-500 uppercase tracking-widest">Connected via Socket.io</p>
+              <p className="text-xs text-neutral-500 uppercase tracking-widest">created by Sir Ace Reyes</p>
             </div>
           </div>
           <div className="flex items-center gap-6">
@@ -100,23 +100,6 @@ export default function HostScreen() {
                 onEnd={handleEnd}
                 className="w-full h-full absolute inset-0"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 z-10 pointer-events-none"></div>
-              {/* Overlay Lyrics / Song Info */}
-              <div className="absolute bottom-10 left-10 right-10 z-20 pointer-events-none">
-                <div className="flex justify-between items-end">
-                  <div className="space-y-1">
-                    <p className="text-rose-500 text-sm font-bold uppercase tracking-widest">Now Playing</p>
-                    <h2 className="text-5xl font-bold line-clamp-1">{roomState.currentSong.title}</h2>
-                    <p className="text-2xl text-neutral-400 line-clamp-1">{roomState.currentSong.channelTitle}</p>
-                  </div>
-                  {roomState.queue.length > 0 && (
-                    <div className="text-right">
-                      <p className="text-xs text-neutral-500 uppercase">Next Song</p>
-                      <p className="text-xl font-semibold max-w-sm truncate">{roomState.queue[0].title}</p>
-                    </div>
-                  )}
-                </div>
-              </div>
             </div>
           ) : (
              <div className="absolute inset-0 flex items-center justify-center bg-neutral-950 z-20">
@@ -177,7 +160,7 @@ export default function HostScreen() {
           
           {/* Footer Branding */}
           <div className="p-4 bg-neutral-950 border-t border-neutral-800 text-center">
-             <p className="text-[10px] text-neutral-600 uppercase tracking-widest">Powered by YouTube Data API v3</p>
+             <p className="text-[10px] text-neutral-600 uppercase tracking-widest">please support my project</p>
           </div>
         </div>
       </div>
